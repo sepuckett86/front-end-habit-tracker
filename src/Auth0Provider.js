@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import createAuth0Client from '@auth0/auth0-spa-js';
+import { setToken } from './services/habitTrackerApi';
 
 const DEFAULT_REDIRECT_CALLBACK = () => {
   window.history.replaceState({},
@@ -46,6 +47,9 @@ export default function Auth0Provider({ children, onRedirectCallback = DEFAULT_R
         setUser(user);
       }
 
+      const claims = await auth0.getIdTokenClaims();
+      setToken(claims.__raw);
+      
       updateLoading(false);
     };
     initAuth0();
